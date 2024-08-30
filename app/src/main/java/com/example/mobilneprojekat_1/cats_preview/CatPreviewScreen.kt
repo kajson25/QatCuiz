@@ -1,4 +1,4 @@
-package com.example.mobilneprojekat_1.cats.preview
+package com.example.mobilneprojekat_1.cats_preview
 
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -10,8 +10,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.example.mobilneprojekat_1.cats.list.CatListScreen
-import com.example.mobilneprojekat_1.cats.list.CatListViewModel
+import com.example.mobilneprojekat_1.cats_list.CatListScreen
+import com.example.mobilneprojekat_1.cats_list.CatListViewModel
 
 import com.example.mobilneprojekat_1.core.theme.MobilneProjekat_1Theme
 

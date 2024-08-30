@@ -1,6 +1,6 @@
-package com.example.mobilneprojekat_1.cats.api
+package com.example.mobilneprojekat_1.networking.controller
 
-import com.example.mobilneprojekat_1.cats.api.model.CatApiModel
+import com.example.mobilneprojekat_1.networking.CatApiModel
 import retrofit2.http.GET
 
 interface MyApiService {

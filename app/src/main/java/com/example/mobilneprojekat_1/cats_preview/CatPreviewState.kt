@@ -1,4 +1,4 @@
-package com.example.mobilneprojekat_1.cats.preview
+package com.example.mobilneprojekat_1.cats_preview
 
 import com.example.mobilneprojekat_1.cats.domain.Cat
 

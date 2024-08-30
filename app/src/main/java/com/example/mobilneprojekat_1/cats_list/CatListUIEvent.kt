@@ -1,4 +1,4 @@
-package com.example.mobilneprojekat_1.cats.list
+package com.example.mobilneprojekat_1.cats_list
 
 sealed class CatListUIEvent {
 

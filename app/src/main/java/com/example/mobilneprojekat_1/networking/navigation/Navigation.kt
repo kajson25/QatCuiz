@@ -1,14 +1,13 @@
-package com.example.mobilneprojekat_1.navigation
+package com.example.mobilneprojekat_1.networking.navigation
 
-import android.app.Application
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.example.mobilneprojekat_1.cats.list.catsListScreen
-import com.example.mobilneprojekat_1.cats.preview.catPreviewScreen
+import com.example.mobilneprojekat_1.cats_list.catsListScreen
+import com.example.mobilneprojekat_1.cats_preview.catPreviewScreen
 
-// renderuje screen
+// renderuje screen + routing
 @Composable
 fun Navigation() {
 

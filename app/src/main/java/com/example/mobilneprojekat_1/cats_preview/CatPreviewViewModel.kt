@@ -1,7 +1,6 @@
-package com.example.mobilneprojekat_1.cats.preview
+package com.example.mobilneprojekat_1.cats_preview
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mobilneprojekat_1.repository.CatRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

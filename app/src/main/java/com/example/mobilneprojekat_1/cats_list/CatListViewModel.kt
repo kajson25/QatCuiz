@@ -1,10 +1,10 @@
-package com.example.mobilneprojekat_1.cats.list
+package com.example.mobilneprojekat_1.cats_list
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.mobilneprojekat_1.networking.CatApiModel
 import com.example.mobilneprojekat_1.cats.domain.Cat
-import com.example.mobilneprojekat_1.cats.api.model.CatApiModel
 import com.example.mobilneprojekat_1.repository.CatRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow

@@ -1,9 +1,9 @@
 package com.example.mobilneprojekat_1.repository
 
+import com.example.mobilneprojekat_1.networking.CatApiModel
 import com.example.mobilneprojekat_1.networking.Client
-import com.example.mobilneprojekat_1.cats.api.MyApiService
+import com.example.mobilneprojekat_1.networking.controller.MyApiService
 import com.example.mobilneprojekat_1.cats.domain.Cat
-import com.example.mobilneprojekat_1.cats.api.model.CatApiModel
 import kotlinx.coroutines.flow.MutableStateFlow
 
 /** Single source of truth
@@ -20,7 +20,7 @@ object CatRepository {
     }
 
     suspend fun fetchCatDetails(catId: String): List<CatApiModel> {
-        return catsApi
+        return catsApi.
     }
 
     fun setCats(cats: List<Cat>) {

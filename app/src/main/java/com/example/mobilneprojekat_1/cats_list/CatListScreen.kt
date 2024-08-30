@@ -1,4 +1,4 @@
-package com.example.mobilneprojekat_1.cats.list
+package com.example.mobilneprojekat_1.cats_list
 
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
@@ -38,14 +37,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.example.mobilneprojekat_1.cats.domain.Cat
-import com.example.mobilneprojekat_1.cats.preview.ItemPreview
 import com.example.mobilneprojekat_1.core.compose.ErrorData
 import com.example.mobilneprojekat_1.core.compose.FetchingData
 import com.example.mobilneprojekat_1.core.compose.NoData
