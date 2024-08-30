@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "MobilneProjekat_1"
+rootProject.name = "QatCuizApp"
 include(":app")
  

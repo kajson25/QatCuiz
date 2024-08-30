@@ -3,9 +3,9 @@ package com.example.mobilneprojekat_1.cats_list
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.mobilneprojekat_1.networking.CatApiModel
-import com.example.mobilneprojekat_1.cats.domain.Cat
+import com.example.mobilneprojekat_1.mapper.asCatDbModel
 import com.example.mobilneprojekat_1.repository.CatRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,9 +13,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class CatListViewModel (
-    private val repository : CatRepository = CatRepository
+@HiltViewModel
+class CatListViewModel @Inject constructor(
+    private val repository : CatRepository
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(CatListState())
@@ -70,9 +72,10 @@ class CatListViewModel (
             setState { copy(fetching = true) }
             try {
                 withContext(Dispatchers.IO) {
-                    val cats = repository.fetchCatBreeds().map { it.asCat() }
-                    setState { copy(catsAll = cats) }
+                    val cats = repository.fetchCatBreeds().map { it.asCatDbModel() }
                     repository.setCats(cats)
+                    //cats = cats.map { it.asCatUiModel() }
+                    setState { copy(catsAll = cats) }
 
                     Log.d("KAJA", "Cats fetched, ${cats.size}")
                 }
@@ -86,14 +89,11 @@ class CatListViewModel (
 
     }
 
-    private fun CatApiModel.asCat() = Cat (
-        id = id?: "",
-        name = name?: "",
-        weight = listOf(weight?.imperial ?: "", weight?.metric ?: "").toString(),
-        life_span = life_span?: "",
-        bred_for = bred_for?: "",
-        breed_group = breed_group?: "",
-    )
+//    private fun CatApiModel.asCat() = CatUiModel (
+//        id = id?: "",
+//        name = name?: "",
+//        weight = listOf(weight?.imperial ?: "", weight?.metric ?: "").toString(),
+//    )
 
 
 }

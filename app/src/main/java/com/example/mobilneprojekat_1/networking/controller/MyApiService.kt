@@ -8,6 +8,4 @@ interface MyApiService {
     @GET("breeds") // to znaci da je putnja /breeds
     suspend fun getListOfBreeds(): List<CatApiModel>
 
-//    @GET("breedDetails")
-
 }

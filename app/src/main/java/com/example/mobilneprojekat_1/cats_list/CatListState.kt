@@ -1,15 +1,15 @@
 package com.example.mobilneprojekat_1.cats_list
 
-import com.example.mobilneprojekat_1.cats.domain.Cat
+import com.example.mobilneprojekat_1.database.entities.CatDbModel
 
-data class CatListState (
+data class CatListState(
     val fetching: Boolean = false,
     val error: CatListError? = null,
     val filter: String = "",
-    val catsAll: List<Cat> = emptyList(),
+    val catsAll: List<CatDbModel> = emptyList(),
 
     val searchActive: Boolean = false,
-    val catsFiltered: List<Cat> = emptyList(),
+    val catsFiltered: List<CatDbModel> = emptyList(),
 ) {
     sealed class CatListError {
         data class CatListUpdateFailed(val cause: Throwable? = null) : CatListError()

@@ -37,37 +37,42 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.example.mobilneprojekat_1.cats.domain.Cat
+import com.example.mobilneprojekat_1.cats.ui_models.CatUiModel
 import com.example.mobilneprojekat_1.core.compose.ErrorData
 import com.example.mobilneprojekat_1.core.compose.FetchingData
 import com.example.mobilneprojekat_1.core.compose.NoData
+import com.example.mobilneprojekat_1.database.entities.CatDbModel
+import com.example.mobilneprojekat_1.mapper.asCatUiModel
 
 fun NavGraphBuilder.catsListScreen(
     route: String,
     navController: NavController,
 ) = composable(route = route) {
-    val catsListViewModel = viewModel<CatListViewModel>()
+    val catsListViewModel = hiltViewModel<CatListViewModel>()
     val state by catsListViewModel.state.collectAsState()
 
     CatListScreen(
         state = state,
         eventPublisher = { catsListViewModel.setEvent(it) },
+        navController = navController,
         onItemClick = { breed ->
-//            navController.navigate("breed/details/${breed.id}")
-            navController.navigate("breeds/${breed.id}/facts")
+            navController.navigate("breed/details/${breed.id}")
+            //navController.navigate("breeds/${breed.id}/facts")
         }
     )
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CatListScreen(
-    state : CatListState,
-    eventPublisher : (CatListUIEvent) -> Unit,
-    onItemClick: (Cat) -> Unit
+    state: CatListState,
+    eventPublisher: (CatListUIEvent) -> Unit,
+    navController: NavController,
+    onItemClick: (CatUiModel) -> Unit
 ) {
 
     Scaffold (
@@ -89,12 +94,14 @@ fun CatListScreen(
 
             if (state.searchActive) {
                 Log.d("KAJA", "Entering search screen")
-                SearchScreen(state, eventPublisher, onItemClick)
+                SearchScreen(state, eventPublisher, paddingValues, navController)
             } else {
                 AllExpendableItems(
-                    cats = state.catsAll,
-                    paddingValues = paddingValues,
-                    onItemClick = onItemClick
+                    catUiModels = state.catsAll.map { cat ->
+                        cat.asCatUiModel()
+                },
+                    navController = navController,
+//                    onItemClick = onItemClick
                 )
 
                 if (state.catsAll.isEmpty()) {
@@ -120,7 +127,8 @@ fun CatListScreen(
 fun SearchScreen(
     state: CatListState,
     eventPublisher: (CatListUIEvent) -> Unit,
-    onItemClick: (Cat) -> Unit
+    paddingValues: PaddingValues,
+    navController: NavController,
 ) {
     Column {
         SearchBar(
@@ -128,9 +136,11 @@ fun SearchScreen(
             eventPublisher = eventPublisher
         )
         AllExpendableItems(
-            cats = state.catsFiltered,
-            paddingValues = PaddingValues(),
-            onItemClick = onItemClick
+            catUiModels = state.catsFiltered.map { cat ->
+                cat.asCatUiModel()
+            },
+            navController = navController,
+//            onItemClick = onItemClick
         )
     }
 }
@@ -173,18 +183,22 @@ fun SearchBar(
 
 @Composable
 fun AllExpendableItems(
-    cats: List<Cat>,
-    paddingValues: PaddingValues,
-    onItemClick: (Cat) -> Unit
+    catUiModels: List<CatUiModel>,
+    navController: NavController,
+//    onItemClick: (CatUiModel) -> Unit
 ) {
-    Log.d("KAJA", "AllExpendableItems: ${cats.size}")
+    Log.d("KAJA", "AllExpendableItems: ${catUiModels.size}")
 
     LazyColumn {
-        items(cats.size) { index ->
+        items(catUiModels.size) { index ->
             ExpandableItem(
-                name = cats[index].name,
-                text = cats[index].breed_group,
-                onNavigate = { onItemClick(cats[index]) }
+                name = catUiModels[index].name,
+                text = catUiModels[index].origins,
+                onItemClick = { cat ->
+                    navController.navigate("breed/details/${cat.id}")
+                },
+                catUiModels[index]
+//                onItemClick = { onItemClick (catUiModels[index]) }
             )
         }
     }
@@ -194,7 +208,8 @@ fun AllExpendableItems(
 fun ExpandableItem(
     name: String,
     text: String,
-    onNavigate: () -> Unit
+    onItemClick: (CatUiModel) -> Unit,
+    catUiModel: CatUiModel,
 ) {
     var expanded by rememberSaveable { mutableStateOf(false) }
 
@@ -232,7 +247,7 @@ fun ExpandableItem(
                 // jer box pakuje komponente jedne na druge
                 Column(modifier = Modifier.padding(8.dp)) {
                     Text(text = text.take(250))
-                    Button(onClick = onNavigate) {
+                    Button({ onItemClick(catUiModel) }) {
                         Text("Go to second screen")
                     }
                 }
@@ -240,12 +255,3 @@ fun ExpandableItem(
         }
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun ListScreenPreview() {
-//    MobilneProjekat_1Theme {
-//        val catViewModel: CatViewModel by viewModels()
-//        SearchScreen(catViewModel)
-//    }
-//}
