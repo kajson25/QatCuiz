@@ -1,4 +1,4 @@
-package com.example.mobilneprojekat_1.cats_ui
+package com.example.mobilneprojekat_1.cat.cats_ui
 
 data class CatUiModel(
 

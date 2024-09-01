@@ -1,4 +1,4 @@
-package com.example.mobilneprojekat_1.cats_list
+package com.example.mobilneprojekat_1.cat.cats_list
 
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
@@ -41,11 +41,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.example.mobilneprojekat_1.cats_ui.CatUiModel
+import com.example.mobilneprojekat_1.cat.cats_ui.CatUiModel
 import com.example.mobilneprojekat_1.core.compose.ErrorData
 import com.example.mobilneprojekat_1.core.compose.FetchingData
 import com.example.mobilneprojekat_1.core.compose.NoData
-import com.example.mobilneprojekat_1.mapper.asCatUiModel
+import com.example.mobilneprojekat_1.cat.asCatUiModel
 
 fun NavGraphBuilder.catsListScreen(
     route: String,

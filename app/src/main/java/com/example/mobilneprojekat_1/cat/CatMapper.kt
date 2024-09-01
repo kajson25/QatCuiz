@@ -1,8 +1,7 @@
-package com.example.mobilneprojekat_1.mapper
+package com.example.mobilneprojekat_1.cat
 
-import com.example.mobilneprojekat_1.cats_ui.CatUiModel
+import com.example.mobilneprojekat_1.cat.cats_ui.CatUiModel
 import com.example.mobilneprojekat_1.database.entities.CatDbModel
-import com.example.mobilneprojekat_1.networking.CatApiModel
 
 fun CatApiModel.asCatDbModel(): CatDbModel {
     return CatDbModel(

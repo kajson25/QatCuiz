@@ -1,6 +1,6 @@
-package com.example.mobilneprojekat_1.cats_preview
+package com.example.mobilneprojekat_1.cat.cats_preview
 
-import com.example.mobilneprojekat_1.cats_ui.CatUiModel
+import com.example.mobilneprojekat_1.cat.cats_ui.CatUiModel
 
 data class CatPreviewState (
     var catId: String,

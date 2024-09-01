@@ -1,4 +1,4 @@
-package com.example.mobilneprojekat_1.cats_preview
+package com.example.mobilneprojekat_1.cat.cats_preview
 
 import android.util.Log
 import androidx.compose.foundation.Image

@@ -6,8 +6,8 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.mobilneprojekat_1.cats_list.catsListScreen
-import com.example.mobilneprojekat_1.cats_preview.catPreviewScreen
+import com.example.mobilneprojekat_1.cat.cats_list.catsListScreen
+import com.example.mobilneprojekat_1.cat.cats_preview.catPreviewScreen
 
 // renderuje screen + routing
 @Composable

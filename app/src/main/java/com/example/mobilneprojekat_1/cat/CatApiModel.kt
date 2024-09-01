@@ -1,4 +1,4 @@
-package com.example.mobilneprojekat_1.networking
+package com.example.mobilneprojekat_1.cat
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

@@ -1,10 +1,10 @@
-package com.example.mobilneprojekat_1.cats_list
+package com.example.mobilneprojekat_1.cat.cats_list
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.mobilneprojekat_1.mapper.asCatDbModel
-import com.example.mobilneprojekat_1.repository.CatRepository
+import com.example.mobilneprojekat_1.cat.asCatDbModel
+import com.example.mobilneprojekat_1.cat.CatRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
