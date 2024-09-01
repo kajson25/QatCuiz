@@ -38,15 +38,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.example.mobilneprojekat_1.cats.ui_models.CatUiModel
+import com.example.mobilneprojekat_1.cats_ui.CatUiModel
 import com.example.mobilneprojekat_1.core.compose.ErrorData
 import com.example.mobilneprojekat_1.core.compose.FetchingData
 import com.example.mobilneprojekat_1.core.compose.NoData
-import com.example.mobilneprojekat_1.database.entities.CatDbModel
 import com.example.mobilneprojekat_1.mapper.asCatUiModel
 
 fun NavGraphBuilder.catsListScreen(
@@ -60,8 +58,9 @@ fun NavGraphBuilder.catsListScreen(
         state = state,
         eventPublisher = { catsListViewModel.setEvent(it) },
         navController = navController,
-        onItemClick = { breed ->
-            navController.navigate("breed/details/${breed.id}")
+        onItemClick = { cat ->
+            Log.d("KAJA", "Starting fetching, ${cat.id}")
+            navController.navigate("breed/details/${cat.id}")
             //navController.navigate("breeds/${breed.id}/facts")
         }
     )
@@ -193,7 +192,7 @@ fun AllExpendableItems(
         items(catUiModels.size) { index ->
             ExpandableItem(
                 name = catUiModels[index].name,
-                text = catUiModels[index].origins,
+                text = catUiModels[index].description,
                 onItemClick = { cat ->
                     navController.navigate("breed/details/${cat.id}")
                 },

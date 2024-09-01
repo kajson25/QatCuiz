@@ -1,13 +1,18 @@
 package com.example.mobilneprojekat_1.cats_preview
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -34,7 +39,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -45,10 +52,16 @@ import com.example.mobilneprojekat_1.core.theme.MobilneProjekat_1Theme
 
 fun NavGraphBuilder.catPreviewScreen(
     route: String,
+    arguments: List<NamedNavArgument>,
     navController: NavController,
-) = composable(route = route) {
-    val catsPreviewViewModel = viewModel<CatPreviewViewModel>()
+) = composable(route = route, arguments = arguments) { backStackEntry ->
+
+    val catId = backStackEntry.arguments?.getString("breedId") ?: ""
+    val catsPreviewViewModel = hiltViewModel<CatPreviewViewModel>()
     val state by catsPreviewViewModel.state.collectAsState()
+    Log.d("Kaja", "Breed id: $catId")
+    Log.d("Kaja", "Cat id: ${backStackEntry.arguments?.getString("catId")}")
+    state.catId = catId
 
     CatPreviewScreen(
         state = state,
@@ -59,32 +72,53 @@ fun NavGraphBuilder.catPreviewScreen(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CatPreviewScreen(
     state: CatPreviewState,
     onBack: () -> Unit,
 ) {
     // Assuming state contains a list of CatUiModel
+    Log.d("KAJA", "Renderujem Preview: ${state}")
     val cat = state.catUiModel ?: return
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(text = "Cat Preview") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+    ) {
+        // Top App Bar
+        Log.d("KAJA", "Macka u renderu: ${cat.name}")
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.primary)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .padding(16.dp)
+            ) {
+                IconButton(onClick = onBack) {
+                    Icon(
+                        Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back",
+                        tint = MaterialTheme.colorScheme.onPrimary
+                    )
                 }
-            )
+                Spacer(modifier = Modifier.width(16.dp))
+                Text(
+                    text = "Cat Preview",
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            }
         }
-    ) { paddingValues ->
+
+        // Content
+        Log.d("KAJA", "Padding: No Padding")
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
-                .verticalScroll(rememberScrollState())
                 .padding(16.dp)
         ) {
             Image(

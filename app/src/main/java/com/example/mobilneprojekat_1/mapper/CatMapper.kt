@@ -1,6 +1,6 @@
 package com.example.mobilneprojekat_1.mapper
 
-import com.example.mobilneprojekat_1.cats.ui_models.CatUiModel
+import com.example.mobilneprojekat_1.cats_ui.CatUiModel
 import com.example.mobilneprojekat_1.database.entities.CatDbModel
 import com.example.mobilneprojekat_1.networking.CatApiModel
 

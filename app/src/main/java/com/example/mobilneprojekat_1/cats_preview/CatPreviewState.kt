@@ -1,9 +1,9 @@
 package com.example.mobilneprojekat_1.cats_preview
 
-import com.example.mobilneprojekat_1.cats.ui_models.CatUiModel
+import com.example.mobilneprojekat_1.cats_ui.CatUiModel
 
 data class CatPreviewState (
-    val catId: String,
+    var catId: String,
     val catUiModel: CatUiModel? = null,
     val error: DetailsError? = null,
 ){

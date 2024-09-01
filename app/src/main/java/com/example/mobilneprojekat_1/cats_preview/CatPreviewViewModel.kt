@@ -1,5 +1,6 @@
 package com.example.mobilneprojekat_1.cats_preview
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -18,12 +19,13 @@ class CatPreviewViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val repository: CatRepository,
 ): ViewModel() {
-    private val catId = savedStateHandle.get<String>("catId")!!
+    private val catId = savedStateHandle.get<String>("breedId")!!
     private val _state = MutableStateFlow(CatPreviewState(catId = catId))
     val state = _state.asStateFlow()
     private fun setState(reducer: CatPreviewState.() -> CatPreviewState) = _state.getAndUpdate(reducer)
 
     init {
+        Log.d("Kaja", "Trenturni macka: $catId")
         fetchCatDetails()
     }
 
@@ -32,6 +34,7 @@ class CatPreviewViewModel @Inject constructor(
             repository.fetchCatDetails(catId = catId)
                 .filterNotNull()
                 .collect {
+                    Log.d("Kaja", "Usao u fetch $catId")
                     setState { copy(catUiModel = it.asCatUiModel()) }
                 }
         }

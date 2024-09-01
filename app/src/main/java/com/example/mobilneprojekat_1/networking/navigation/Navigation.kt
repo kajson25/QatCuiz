@@ -2,8 +2,10 @@ package com.example.mobilneprojekat_1.networking.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.mobilneprojekat_1.cats_list.catsListScreen
 import com.example.mobilneprojekat_1.cats_preview.catPreviewScreen
 
@@ -22,8 +24,13 @@ fun Navigation() {
 
         catPreviewScreen(
             route = "breed/details/{breedId}",
-            navController = navController,
+            arguments = listOf(
+                navArgument("breedId") {
+                    type = NavType.StringType
+                },
 //            application = context.applicationContext as Application
+            ),
+            navController = navController,
         )
     }
 }
