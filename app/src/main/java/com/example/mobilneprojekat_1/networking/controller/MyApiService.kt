@@ -1,6 +1,6 @@
 package com.example.mobilneprojekat_1.networking.controller
 
-import com.example.mobilneprojekat_1.image.image_view.ImageApiModel
+import com.example.mobilneprojekat_1.image.ImageApiModel
 import com.example.mobilneprojekat_1.cat.CatApiModel
 import retrofit2.http.GET
 import retrofit2.http.Query

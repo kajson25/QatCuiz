@@ -1,7 +1,6 @@
 package com.example.mobilneprojekat_1.image
 
 import com.example.mobilneprojekat_1.database.entities.ImageDbModel
-import com.example.mobilneprojekat_1.image.image_view.ImageApiModel
 import com.example.mobilneprojekat_1.image.image_ui.ImageUiModel
 
 

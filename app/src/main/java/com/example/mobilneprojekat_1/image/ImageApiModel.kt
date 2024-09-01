@@ -1,4 +1,4 @@
-package com.example.mobilneprojekat_1.image.image_view
+package com.example.mobilneprojekat_1.image
 
 import kotlinx.serialization.Serializable
 

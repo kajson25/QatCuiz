@@ -36,11 +36,11 @@ class ImageViewModel (
 
     /**
      * Observes images for the breed from the database and updates the state.
-     */
+    */
     private fun observeImages() {
         viewModelScope.launch {
             repository.fetchImagesForCat(catId)
-                .distinctUntilChanged()
+                    .distinctUntilChanged()
                 .collect {
                     setState { copy(images = it.map { it.asImageUiModel() }) }
                 }
