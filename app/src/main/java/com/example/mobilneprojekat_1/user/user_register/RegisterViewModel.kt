@@ -26,16 +26,43 @@ class RegisterViewModel @Inject constructor(
         observeEvents()
     }
 
-    /** Observe events sent from UI to this View Model */
+    /** Observe events sent from UI to this ViewModel */
     private fun observeEvents() {
         viewModelScope.launch {
-            events.collect {
-                when(it) {
+            events.collect { event ->
+                when(event) {
                     is RegisterEvent.Register -> {
-                        repository.registerUser(it.asUserData())
+                        registerUser(event) // Handle user registration
                     }
                 }
             }
         }
+    }
+
+    private fun registerUser(event: RegisterEvent.Register) {
+        viewModelScope.launch {
+            try {
+                // Call the repository to register the user
+                repository.registerUser(event.asUserData())
+                // Notify the UI with success event or callback
+                _onRegisterSuccess() // Call UI callback or send success signal
+            } catch (e: Exception) {
+                // Notify the UI with error event or callback
+                _onRegisterError(e.message ?: "Unknown error")
+            }
+        }
+    }
+
+    // Simple callback functions for success or error handling
+    private var _onRegisterSuccess: () -> Unit = {}
+    private var _onRegisterError: (String) -> Unit = {}
+
+    // Functions to be set by the UI to observe success or error
+    fun setOnRegisterSuccessListener(listener: () -> Unit) {
+        _onRegisterSuccess = listener
+    }
+
+    fun setOnRegisterErrorListener(listener: (String) -> Unit) {
+        _onRegisterError = listener
     }
 }

@@ -13,11 +13,16 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -59,12 +64,11 @@ fun NavGraphBuilder.catsListScreen(
         eventPublisher = { catsListViewModel.setEvent(it) },
         navController = navController,
         onItemClick = { cat ->
-            Log.d("KAJA", "Starting fetching, ${cat.id}")
             navController.navigate("breed/details/${cat.id}")
-            //navController.navigate("breeds/${breed.id}/facts")
         }
     )
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CatListScreen(
@@ -73,11 +77,10 @@ fun CatListScreen(
     navController: NavController,
     onItemClick: (CatUiModel) -> Unit
 ) {
-
-    Scaffold (
+    Scaffold(
         // TOP BAR
         topBar = {
-            if(!state.searchActive) {
+            if (!state.searchActive) {
                 TopAppBar(
                     title = { Text("Kajina aplikacija") },
                     actions = {
@@ -89,18 +92,16 @@ fun CatListScreen(
             }
         },
 
+        // CONTENT
         content = { paddingValues ->
-
             if (state.searchActive) {
-                Log.d("KAJA", "Entering search screen")
                 SearchScreen(state, eventPublisher, paddingValues, navController)
             } else {
                 AllExpendableItems(
                     catUiModels = state.catsAll.map { cat ->
                         cat.asCatUiModel()
-                },
-                    navController = navController,
-//                    onItemClick = onItemClick
+                    },
+                    navController = navController
                 )
 
                 if (state.catsAll.isEmpty()) {
@@ -110,7 +111,6 @@ fun CatListScreen(
                             ErrorData(
                                 errorMessage = state.error.cause?.message ?: "Failed to load."
                             )
-
                         else -> NoData()
                     }
                 }
@@ -118,9 +118,38 @@ fun CatListScreen(
         },
 
         // BOTTOM BAR
+        bottomBar = {
+            BottomBar(navController)
+        }
     )
-
 }
+
+@Composable
+fun BottomBar(navController: NavController) {
+    BottomNavigation {
+        BottomNavigationItem(
+            icon = { Icon(Icons.Default.Home, contentDescription = "LB") },
+            label = { Text("LB") },
+            selected = false,  // Implement logic to handle selection state
+            onClick = { navController.navigate("leaderboard") }
+        )
+
+        BottomNavigationItem(
+            icon = { Icon(Icons.Default.Favorite, contentDescription = "Profile") },
+            label = { Text("Profile") },
+            selected = false,  // Implement logic to handle selection state
+            onClick = { navController.navigate("profile/edit") }
+        )
+
+//        BottomNavigationItem(
+//            icon = { Icon(Icons.Default.Settings, contentDescription = "Settings") },
+//            label = { Text("Settings") },
+//            selected = false,  // Implement logic to handle selection state
+//            onClick = { navController.navigate("settings") }
+//        )
+    }
+}
+
 
 @Composable
 fun SearchScreen(

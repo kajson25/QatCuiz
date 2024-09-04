@@ -30,14 +30,14 @@ class ProfileViewModel @Inject constructor(
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 val userData = repository.getUserData()
-//                val quizResults = repository.getAllResults()
-//                val bestGlobalRank = repository.getBestGlobalRank()
+                val quizResults = repository.getAllResults()
+                val bestGlobalRank = repository.getBestGlobalRank()
 
                 setState { copy(
                     userData = userData,
-//                    bestGlobalRank = bestGlobalRank,
-//                    totalGamesPlayed = quizResults.size,
-//                    quizResults = quizResults,
+                    bestGlobalRank = bestGlobalRank,
+                    totalGamesPlayed = quizResults.size,
+                    quizResults = quizResults,
 
                     fetchingData = false
                 )}

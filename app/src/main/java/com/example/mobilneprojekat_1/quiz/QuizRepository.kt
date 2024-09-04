@@ -1,5 +1,6 @@
 package com.example.mobilneprojekat_1.quiz
 
+import com.example.catapult.data.database.entities.ResultDbModel
 import com.example.mobilneprojekat_1.database.AppDatabase
 import com.example.mobilneprojekat_1.database.entities.CatDbModel
 import com.example.mobilneprojekat_1.image.asImageDbModel
@@ -57,18 +58,18 @@ class QuizRepository @Inject constructor(
         q.catImageUrl = images.random().url
     }
 
-//    suspend fun submitResultToDatabase(score: Double) {
-//        withContext(Dispatchers.IO) {
-//            database.resultDao().insert(
-//                ResultDbModel(
-//                    nickname = store.getUserData().nickname,
-//                    result = score,
-//                    createdAt = System.currentTimeMillis(),
-//                    published = false
-//                )
-//            )
-//        }
-//    }
+    suspend fun submitResultToDatabase(score: Double) {
+        withContext(Dispatchers.IO) {
+            database.resultDao().insert(
+                ResultDbModel(
+                    username = store.getUserData().username,
+                    result = score,
+                    createdAt = System.currentTimeMillis(),
+                    published = false
+                )
+            )
+        }
+    }
 
     /**
      * Generates a question of type 1: "Which cat is this?"

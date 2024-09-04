@@ -4,6 +4,7 @@ import android.os.CountDownTimer
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.mobilneprojekat_1.leadboard.LeaderboardRepository
 import com.example.mobilneprojekat_1.quiz.QuizRepository
 import com.example.mobilneprojekat_1.quiz.question_view.QuizQuestionContract.QuizQuestionState
 import com.example.mobilneprojekat_1.quiz.question_view.QuizQuestionContract.QuizQuestionEvent
@@ -22,7 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class QuizQuestionViewModel @Inject constructor (
     private val quizRepository: QuizRepository,
-//    private val lbRepository: LeaderboardRepository,
+    private val lbRepository: LeaderboardRepository,
 ): ViewModel() {
 
     private val _state = MutableStateFlow(QuizQuestionState())
@@ -91,7 +92,7 @@ class QuizQuestionViewModel @Inject constructor (
                     }
 
                     is QuizQuestionEvent.SubmitResult -> {
-//                        lbRepository.submitQuizResult(result = it.score)
+                        lbRepository.submitQuizResult(result = it.score)
                     }
 //                }
                 }
@@ -129,7 +130,7 @@ class QuizQuestionViewModel @Inject constructor (
         setState { copy(score = score) }
 
         // Save to database
-//        quizRepository.submitResultToDatabase(score)
+        quizRepository.submitResultToDatabase(score)
     }
 
     private fun calculateScore(): Double {
