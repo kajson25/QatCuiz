@@ -1,5 +1,6 @@
 package com.example.mobilneprojekat_1.networking
 
+import com.example.mobilneprojekat_1.leadboard.api.LeadboardApi
 import com.example.mobilneprojekat_1.networking.controller.MyApiService
 import dagger.Module
 import dagger.Provides
@@ -20,8 +21,9 @@ object RetrofitsProvider {
     fun provideCatsRetrofit(@Named("CatApiRetrofit") retrofit: Retrofit): MyApiService {
         return retrofit.create(MyApiService::class.java)
     }
-//    @Provides
-//    @Singleton
-//    fun provideCatsRetrofit(@Named("CatApiRetrofit") retrofit: Retrofit): MyApiService = retrofit.create()
+
+    @Provides
+    @Singleton
+    fun provideLeaderboardRetrofit(@Named("LeadboardApiRetrofit") retrofit: Retrofit): LeadboardApi = retrofit.create()
 
 }

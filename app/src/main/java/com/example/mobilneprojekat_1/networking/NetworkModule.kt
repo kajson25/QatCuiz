@@ -2,6 +2,7 @@ package com.example.mobilneprojekat_1.networking
 
 import com.example.mobilneprojekat_1.networking.serialization.AppJson
 import com.example.mobilneprojekat_1.networking.url.CatApiUrl
+import com.example.mobilneprojekat_1.networking.url.LeaderboardApiUrl
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -45,6 +46,17 @@ object NetworkModule {
     @Singleton
     @Named("CatApiRetrofit")
     fun provideCatApiRetrofit(okHttpClient: OkHttpClient, @CatApiUrl baseUrl: String): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .client(okHttpClient)
+            .addConverterFactory(AppJson.asConverterFactory("application/json".toMediaType()))
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    @Named("LeadboardApiRetrofit")
+    fun provideLeaderboardApiRetrofit(okHttpClient: OkHttpClient, @LeaderboardApiUrl baseUrl: String): Retrofit {
         return Retrofit.Builder()
             .baseUrl(baseUrl)
             .client(okHttpClient)

@@ -15,9 +15,9 @@ object ApiUrlsModule {
         return "https://api.thecatapi.com/v1/"
     }
 
-//    @LeaderboardApiUrl
-//    @Provides
-//    fun provideLeaderboardApiUrl(): String {
-//        return "https://rma.finlab.rs/"
-//    }
+    @LeaderboardApiUrl
+    @Provides
+    fun provideLeaderboardApiUrl(): String {
+        return "https://rma.finlab.rs/"
+    }
 }

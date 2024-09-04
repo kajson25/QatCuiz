@@ -15,9 +15,10 @@ import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.IOException
+import javax.inject.Inject
 
 @HiltViewModel
-class ImageViewModel (
+class ImageViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val repository: CatRepository
 ): ViewModel() {
