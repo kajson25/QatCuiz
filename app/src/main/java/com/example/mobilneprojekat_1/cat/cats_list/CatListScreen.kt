@@ -13,29 +13,28 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -51,11 +50,15 @@ import com.example.mobilneprojekat_1.core.compose.ErrorData
 import com.example.mobilneprojekat_1.core.compose.FetchingData
 import com.example.mobilneprojekat_1.core.compose.NoData
 import com.example.mobilneprojekat_1.cat.asCatUiModel
+import com.example.mobilneprojekat_1.navigation.AppDrawer
+import com.example.mobilneprojekat_1.navigation.HamburgerMenu
+import com.example.mobilneprojekat_1.navigation.NavigationViewModel
 
 fun NavGraphBuilder.catsListScreen(
     route: String,
     navController: NavController,
 ) = composable(route = route) {
+
     val catsListViewModel = hiltViewModel<CatListViewModel>()
     val state by catsListViewModel.state.collectAsState()
 
@@ -63,10 +66,9 @@ fun NavGraphBuilder.catsListScreen(
         state = state,
         eventPublisher = { catsListViewModel.setEvent(it) },
         navController = navController,
-        onItemClick = { cat ->
-            navController.navigate("breed/details/${cat.id}")
-        }
+        onItemClick = { cat -> navController.navigate("breed/details/${cat.id}") },
     )
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -75,81 +77,68 @@ fun CatListScreen(
     state: CatListState,
     eventPublisher: (CatListUIEvent) -> Unit,
     navController: NavController,
-    onItemClick: (CatUiModel) -> Unit
+    onItemClick: (CatUiModel) -> Unit,
 ) {
-    Scaffold(
-        // TOP BAR
-        topBar = {
-            if (!state.searchActive) {
-                TopAppBar(
-                    title = { Text("Kajina aplikacija") },
-                    actions = {
-                        IconButton(onClick = { eventPublisher(CatListUIEvent.StartSearch) }) {
-                            Icon(Icons.Filled.Search, contentDescription = "Search")
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
+
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            AppDrawer(
+                navController = navController,
+                drawerState = drawerState,
+                scope = scope
+            )
+        }
+    ) {
+        Scaffold(
+            // TOP BAR
+            topBar = {
+                if (!state.searchActive) {
+                    TopAppBar(
+                        title = { Text("Kajina aplikacija") },
+                        navigationIcon = { HamburgerMenu(drawerState = drawerState) },
+                        actions = {
+                            IconButton(onClick = { eventPublisher(CatListUIEvent.StartSearch) }) {
+                                Icon(Icons.Filled.Search, contentDescription = "Search")
+                            }
+                        }
+                    )
+                }
+            },
+
+            // CONTENT
+            content = { paddingValues ->
+                if (state.searchActive) {
+                    SearchScreen(state, eventPublisher, paddingValues, navController)
+                } else {
+                    AllExpendableItems(
+                        catUiModels = state.catsAll.map { cat ->
+                            cat.asCatUiModel()
+                        },
+                        navController = navController
+                    )
+
+                    if (state.catsAll.isEmpty()) {
+                        when {
+                            state.fetching -> FetchingData()
+                            state.error is CatListState.CatListError.CatListUpdateFailed ->
+                                ErrorData(
+                                    errorMessage = state.error.cause?.message ?: "Failed to load."
+                                )
+
+                            else -> NoData()
                         }
                     }
-                )
-            }
-        },
-
-        // CONTENT
-        content = { paddingValues ->
-            if (state.searchActive) {
-                SearchScreen(state, eventPublisher, paddingValues, navController)
-            } else {
-                AllExpendableItems(
-                    catUiModels = state.catsAll.map { cat ->
-                        cat.asCatUiModel()
-                    },
-                    navController = navController
-                )
-
-                if (state.catsAll.isEmpty()) {
-                    when {
-                        state.fetching -> FetchingData()
-                        state.error is CatListState.CatListError.CatListUpdateFailed ->
-                            ErrorData(
-                                errorMessage = state.error.cause?.message ?: "Failed to load."
-                            )
-                        else -> NoData()
-                    }
                 }
-            }
-        },
+            },
 
-        // BOTTOM BAR
-        bottomBar = {
-            BottomBar(navController)
-        }
-    )
-}
+            // BOTTOM BAR
 
-@Composable
-fun BottomBar(navController: NavController) {
-    BottomNavigation {
-        BottomNavigationItem(
-            icon = { Icon(Icons.Default.Home, contentDescription = "LB") },
-            label = { Text("LB") },
-            selected = false,  // Implement logic to handle selection state
-            onClick = { navController.navigate("leaderboard") }
         )
-
-        BottomNavigationItem(
-            icon = { Icon(Icons.Default.Favorite, contentDescription = "Profile") },
-            label = { Text("Profile") },
-            selected = false,  // Implement logic to handle selection state
-            onClick = { navController.navigate("profile/edit") }
-        )
-
-//        BottomNavigationItem(
-//            icon = { Icon(Icons.Default.Settings, contentDescription = "Settings") },
-//            label = { Text("Settings") },
-//            selected = false,  // Implement logic to handle selection state
-//            onClick = { navController.navigate("settings") }
-//        )
     }
 }
-
 
 @Composable
 fun SearchScreen(

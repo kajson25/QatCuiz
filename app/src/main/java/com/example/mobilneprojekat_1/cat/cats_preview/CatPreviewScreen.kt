@@ -20,16 +20,20 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -49,6 +53,9 @@ import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 
 import com.example.mobilneprojekat_1.core.theme.MobilneProjekat_1Theme
+import com.example.mobilneprojekat_1.navigation.AppDrawer
+import com.example.mobilneprojekat_1.navigation.HamburgerMenu
+import com.example.mobilneprojekat_1.navigation.Navigation
 
 fun NavGraphBuilder.catPreviewScreen(
     route: String,
@@ -65,103 +72,123 @@ fun NavGraphBuilder.catPreviewScreen(
 
     CatPreviewScreen(
         state = state,
-        onBack = { navController.popBackStack() }
+        onBack = { navController.popBackStack() },
+        navController = navController,
 //        onItemClick = { breed ->
 //            navController.navigate("breed/details/${breed.id}")
 //        }
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CatPreviewScreen(
     state: CatPreviewState,
     onBack: () -> Unit,
+    navController: NavController,
 ) {
     // Assuming state contains a list of CatUiModel
-    Log.d("KAJA", "Renderujem Preview: ${state}")
+    Log.d("KAJA", "Renderujem Preview: $state")
     val cat = state.catUiModel ?: return
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-    ) {
-        // Top App Bar
-        Log.d("KAJA", "Macka u renderu: ${cat.name}")
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.primary)
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .padding(16.dp)
-            ) {
-                IconButton(onClick = onBack) {
-                    Icon(
-                        Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back",
-                        tint = MaterialTheme.colorScheme.onPrimary
-                    )
-                }
-                Spacer(modifier = Modifier.width(16.dp))
-                Text(
-                    text = "Cat Preview",
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
-            }
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            AppDrawer(
+                navController = navController,
+                drawerState = drawerState,
+                scope = scope
+            )
         }
-
-        // Content
-        Log.d("KAJA", "Padding: No Padding")
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
+                .verticalScroll(rememberScrollState()),
         ) {
-            Image(
-                painter = rememberAsyncImagePainter(model = cat.imageUrl),
-                contentDescription = "${cat.name} image",
+            TopAppBar(
+                title = { Text("Kajina aplikacija") },
+                navigationIcon = { HamburgerMenu(drawerState = drawerState) },
+            )
+            // Top App Bar
+            Log.d("KAJA", "Macka u renderu: ${cat.name}")
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp)
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(Color.Gray)
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = cat.name,
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.Bold
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = cat.altNames.joinToString(", "),
-                style = MaterialTheme.typography.headlineMedium,
-                color = Color.Gray
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = cat.description,
-                style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.Justify
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = "Temperament: ${cat.temperament.take(3).joinToString(", ")}",
-                style = MaterialTheme.typography.bodyMedium,
-                fontStyle = FontStyle.Italic
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Button(
-                onClick = {
-                    // Add navigation to details here when ready
-                },
-                modifier = Modifier.align(Alignment.CenterHorizontally)
+                    .background(MaterialTheme.colorScheme.primary)
             ) {
-                Text(text = "View Details")
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .padding(16.dp)
+                ) {
+                    IconButton(onClick = onBack) {
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            tint = MaterialTheme.colorScheme.onPrimary
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Text(
+                        text = "Cat Preview",
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
+            }
+
+            // Content
+            Log.d("KAJA", "Padding: No Padding")
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
+            ) {
+                Image(
+                    painter = rememberAsyncImagePainter(model = cat.imageUrl),
+                    contentDescription = "${cat.name} image",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(Color.Gray)
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = cat.name,
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = cat.altNames.joinToString(", "),
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = Color.Gray
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = cat.description,
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Justify
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = "Temperament: ${cat.temperament.take(3).joinToString(", ")}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontStyle = FontStyle.Italic
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Button(
+                    onClick = {
+                        // Add navigation to details here when ready
+                    },
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                ) {
+                    Text(text = "View Details")
+                }
             }
         }
     }
