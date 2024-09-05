@@ -8,11 +8,11 @@ fun LeaderboardApiModel.asLBItemDbModel(
     allResults: List<LeaderboardApiModel>
 ): LBItemDbModel {
 
-    val totalGamesPlayed = allResults.count { it.username == this.username }
+    val totalGamesPlayed = allResults.count { it.nickname == this.nickname }
 
     // id is automatically generated
     return LBItemDbModel(
-        username = username,
+        username = nickname,
         result = result,
         totalGamesPlayed = totalGamesPlayed,
         createdAt = createdAt

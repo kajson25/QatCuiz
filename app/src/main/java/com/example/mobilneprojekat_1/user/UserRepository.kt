@@ -20,7 +20,7 @@ class UserRepository @Inject constructor(
     suspend fun getBestGlobalRank(): Pair<Int, Double> {
         if (database.leaderboardDao().getAll().isEmpty())
             lbRepository.fetchLeaderboard()
-        val username = store.getUserData().username
+        val username = store.getUserData().nickname
         return database.leaderboardDao().getBestGlobalRank(username)
     }
 

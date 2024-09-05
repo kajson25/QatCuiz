@@ -46,11 +46,11 @@ fun NavGraphBuilder.quizQuestionScreen(
         },
         publishResult = {
                 score -> quizQuestionViewModel.setEvent(QuizQuestionContract.QuizQuestionEvent.SubmitResult(score))
-            navController.navigate("leaderboard")
+                navController.navigate("leaderboard")
         },
         cancelQuiz = { navController.navigate("quiz/start")},
         restartQuiz = { navController.navigate("quiz/start") },
-        discoverPage = { navController.navigate("breeds") }
+        discoverPage = { navController.navigate("explore") }
     )
 }
 

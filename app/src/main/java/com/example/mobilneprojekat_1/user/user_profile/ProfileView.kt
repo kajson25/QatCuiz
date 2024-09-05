@@ -94,8 +94,8 @@ fun ProfileScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // Display the user's name and username
-                Text(text = "Name: ${state.userData.name}")
-                Text(text = "Username: ${state.userData.username}")
+                Text(text = "Name: ${state.userData.firstName}")
+                Text(text = "Username: ${state.userData.nickname}")
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // Best global rank

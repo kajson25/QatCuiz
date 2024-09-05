@@ -11,15 +11,17 @@ interface ProfileEditContract {
 
     sealed class ProfileEditEvent {
         data class UpdateProfile(
-            val name: String,
-            val username: String,
+            val firstName: String,
+            val lastName: String,
+            val nickname: String,
             val email: String
         ) : ProfileEditEvent() {
 
             fun asUserData() : UserData {
                 return UserData(
-                    name = name,
-                    username = username,
+                    firstName = firstName,
+                    lastName = lastName,
+                    nickname = nickname,
                     email = email
                 )
             }

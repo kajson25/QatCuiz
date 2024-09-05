@@ -10,19 +10,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,16 +26,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.example.mobilneprojekat_1.navigation.AppDrawer
-import com.example.mobilneprojekat_1.navigation.HamburgerMenu
 
 fun NavGraphBuilder.registerScreen(
     route: String,
-    onRegisterSuccess: () -> Unit, // Optional: Callback for navigation after successful registration
-    navController: NavController,
+    onRegisterSuccess: () -> Unit,
 ) = composable(route = route) {
 
     // Get the RegisterViewModel using Hilt
@@ -78,10 +70,9 @@ fun NavGraphBuilder.registerScreen(
         isLoading = isLoading,
         onRegister = {
             isLoading = true
-            registerViewModel.setEvent(RegisterContract.RegisterEvent.Register(name, nickname, email))
+            registerViewModel.setEvent(RegisterContract.RegisterEvent.Register(name, "last-name", nickname, email))
         },
         errorMessage = errorMessage,
-        navController = navController,
     )
 }
 
@@ -98,80 +89,65 @@ fun RegisterScreen(
     isLoading: Boolean,
     onRegister: () -> Unit,
     errorMessage: String?,
-    navController: NavController,
 ) {
-    val drawerState = rememberDrawerState(DrawerValue.Closed)
-    val scope = rememberCoroutineScope()
-
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        drawerContent = {
-            AppDrawer(
-                navController = navController,
-                drawerState = drawerState,
-                scope = scope
-            )
-        }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            TopAppBar(
-                title = { Text("Kajina aplikacija") },
-                navigationIcon = { HamburgerMenu(drawerState = drawerState) },
+        TopAppBar(
+            title = { Text("Kajina aplikacija") },
+        )
+        // Name input field
+        OutlinedTextField(
+            value = name,
+            onValueChange = onNameChange,
+            label = { Text("Name") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // Nickname input field
+        OutlinedTextField(
+            value = nickname,
+            onValueChange = onNicknameChange,
+            label = { Text("Nickname") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // Email input field
+        OutlinedTextField(
+            value = email,
+            onValueChange = onEmailChange,
+            label = { Text("Email") },
+            modifier = Modifier.fillMaxWidth(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Display error message if there's any
+        errorMessage?.let {
+            Text(
+                text = it,
+                color = Color.Red,
+                modifier = Modifier.padding(8.dp)
             )
-            // Name input field
-            OutlinedTextField(
-                value = name,
-                onValueChange = onNameChange,
-                label = { Text("Name") },
+        }
+
+        // Show loading indicator or Register button
+        if (isLoading) {
+            CircularProgressIndicator()
+        } else {
+            Button(
+                onClick = onRegister,
                 modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-
-            // Nickname input field
-            OutlinedTextField(
-                value = nickname,
-                onValueChange = onNicknameChange,
-                label = { Text("Nickname") },
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-
-            // Email input field
-            OutlinedTextField(
-                value = email,
-                onValueChange = onEmailChange,
-                label = { Text("Email") },
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Display error message if there's any
-            errorMessage?.let {
-                Text(
-                    text = it,
-                    color = Color.Red,
-                    modifier = Modifier.padding(8.dp)
-                )
-            }
-
-            // Show loading indicator or Register button
-            if (isLoading) {
-                CircularProgressIndicator()
-            } else {
-                Button(
-                    onClick = onRegister,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(text = "Register")
-                }
+            ) {
+                Text(text = "Register")
             }
         }
+
     }
 }

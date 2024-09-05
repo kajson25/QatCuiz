@@ -26,8 +26,9 @@ class UserStore @Inject constructor(
         return try {
             val user = persistence.data.first()
             user.email.isNotEmpty() &&
-            user.name.isNotEmpty() &&
-            user.username.isNotEmpty()
+            user.firstName.isNotEmpty() &&
+            user.lastName.isNotEmpty() &&
+            user.nickname.isNotEmpty()
         } catch (e: Exception) {
             false
         }

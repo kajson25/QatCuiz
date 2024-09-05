@@ -32,7 +32,7 @@ class LeaderboardRepository @Inject constructor(
         withContext(Dispatchers.IO) {
             leaderboardApi.postLeaderboard(
                 SubmitResultRequest(
-                    username = store.getUserData().username,
+                    nickname = store.getUserData().nickname,
                     result = result,
                     category = categoryId
                 )

@@ -26,7 +26,7 @@ class QuizRepository @Inject constructor(
 
     suspend fun generateQuestions(): List<Question> = coroutineScope {
         val questions = mutableListOf<Deferred<Question>>()
-        repeat(20) {
+        repeat(2) {
             questions += async {
                 withContext(Dispatchers.IO) {
                     when (Random.nextInt(3)) {
@@ -62,7 +62,7 @@ class QuizRepository @Inject constructor(
         withContext(Dispatchers.IO) {
             database.resultDao().insert(
                 ResultDbModel(
-                    username = store.getUserData().username,
+                    username = store.getUserData().nickname,
                     result = score,
                     createdAt = System.currentTimeMillis(),
                     published = false

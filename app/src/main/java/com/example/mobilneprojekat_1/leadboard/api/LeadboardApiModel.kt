@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class SubmitResultRequest(
-    val username: String,
+    val nickname: String,
     val result: Double,
     val category: Int
 )
@@ -18,7 +18,7 @@ data class SubmitResultResponse(
 @Serializable
 data class LeaderboardApiModel(
     val category: Int = 0,
-    val username: String = "",
+    val nickname: String = "",
     val result: Double = 0.0,
     val createdAt: Long = 0L        // timestamp
 )
